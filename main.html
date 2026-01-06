@@ -1,16 +1,118 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 30px; }
+    .container { max-width: 500px; margin: auto; }
+    input { margin: 5px; padding: 5px; }
+    #submit { padding: 5px 10px; }
+    .board { display: grid; grid-template-columns: repeat(3, 100px); grid-gap: 5px; margin: 20px auto; }
+    .cell { width: 100px; height: 100px; background-color: #f0f0f0; font-size: 48px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .message { margin: 20px 0; font-size: 18px; font-weight: bold; }
+  </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+  <div class="container">
+    <h1>Tic Tac Toe</h1>
 
+    <!-- Player input form -->
+    <div id="playerForm">
+      <input type="text" id="player-1" placeholder="Player 1 Name">
+      <input type="text" id="player-2" placeholder="Player 2 Name">
+      <button id="submit">Start Game</button>
+    </div>
+
+    <!-- Message div -->
+    <div class="message" id="message" style="display:none;"></div>
+
+    <!-- Tic Tac Toe board -->
+    <div class="board" id="board" style="display:none;">
+      <div class="cell" id="1"></div>
+      <div class="cell" id="2"></div>
+      <div class="cell" id="3"></div>
+      <div class="cell" id="4"></div>
+      <div class="cell" id="5"></div>
+      <div class="cell" id="6"></div>
+      <div class="cell" id="7"></div>
+      <div class="cell" id="8"></div>
+      <div class="cell" id="9"></div>
+    </div>
+  </div>
+
+  <script>
+    const submitBtn = document.getElementById('submit');
+    const player1Input = document.getElementById('player-1');
+    const player2Input = document.getElementById('player-2');
+    const playerForm = document.getElementById('playerForm');
+    const board = document.getElementById('board');
+    const message = document.getElementById('message');
+    const cells = document.querySelectorAll('.cell');
+
+    let player1 = '';
+    let player2 = '';
+    let currentPlayer = '';
+    let gameActive = true;
+    let boardState = Array(9).fill(null); // store X or O
+
+    const winningCombinations = [
+      [0,1,2], [3,4,5], [6,7,8], // rows
+      [0,3,6], [1,4,7], [2,5,8], // columns
+      [0,4,8], [2,4,6]           // diagonals
+    ];
+
+    // Start the game
+    submitBtn.addEventListener('click', () => {
+      player1 = player1Input.value.trim();
+      player2 = player2Input.value.trim();
+
+      if (!player1 || !player2) {
+        alert("Please enter names for both players.");
+        return;
+      }
+
+      currentPlayer = player1;
+      playerForm.style.display = 'none';
+      board.style.display = 'grid';
+      message.style.display = 'block';
+      message.textContent = `${currentPlayer}, you're up!`;
+    });
+
+    // Handle clicks on the board
+    cells.forEach((cell, index) => {
+      cell.addEventListener('click', () => {
+        if (!gameActive || boardState[index]) return;
+
+        boardState[index] = currentPlayer === player1 ? 'X' : 'O';
+        cell.textContent = boardState[index];
+
+        if (checkWin()) {
+          message.textContent = `${currentPlayer} congratulations, you won!`;
+          gameActive = false;
+          return;
+        }
+
+        if (boardState.every(cell => cell)) {
+          message.textContent = "It's a tie!";
+          gameActive = false;
+          return;
+        }
+
+        // Switch player
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+        message.textContent = `${currentPlayer}, you're up!`;
+      });
+    });
+
+    // Check for a win
+    function checkWin() {
+      return winningCombinations.some(combination => {
+        const [a,b,c] = combination;
+        return boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c];
+      });
+    }
+  </script>
 </body>
-
 </html>
