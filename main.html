@@ -20,8 +20,8 @@
 
     <!-- Player input form -->
     <div id="playerForm">
-      <input type="text" id="player-1" placeholder="Player 1 Name">
-      <input type="text" id="player-2" placeholder="Player 2 Name">
+      <input type="text" id="player1" placeholder="Player 1 Name">
+      <input type="text" id="player2" placeholder="Player 2 Name">
       <button id="submit">Start Game</button>
     </div>
 
@@ -44,8 +44,8 @@
 
   <script>
     const submitBtn = document.getElementById('submit');
-    const player1Input = document.getElementById('player-1');
-    const player2Input = document.getElementById('player-2');
+    const player1Input = document.getElementById('player1');
+    const player2Input = document.getElementById('player2');
     const playerForm = document.getElementById('playerForm');
     const board = document.getElementById('board');
     const message = document.getElementById('message');
@@ -73,46 +73,4 @@
         return;
       }
 
-      currentPlayer = player1;
-      playerForm.style.display = 'none';
-      board.style.display = 'grid';
-      message.style.display = 'block';
-      message.textContent = `${currentPlayer}, you're up!`;
-    });
-
-    // Handle clicks on the board
-    cells.forEach((cell, index) => {
-      cell.addEventListener('click', () => {
-        if (!gameActive || boardState[index]) return;
-
-        boardState[index] = currentPlayer === player1 ? 'X' : 'O';
-        cell.textContent = boardState[index];
-
-        if (checkWin()) {
-          message.textContent = `${currentPlayer} congratulations, you won!`;
-          gameActive = false;
-          return;
-        }
-
-        if (boardState.every(cell => cell)) {
-          message.textContent = "It's a tie!";
-          gameActive = false;
-          return;
-        }
-
-        // Switch player
-        currentPlayer = currentPlayer === player1 ? player2 : player1;
-        message.textContent = `${currentPlayer}, you're up!`;
-      });
-    });
-
-    // Check for a win
-    function checkWin() {
-      return winningCombinations.some(combination => {
-        const [a,b,c] = combination;
-        return boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c];
-      });
-    }
-  </script>
-</body>
-</html>
+      currentPlayer
